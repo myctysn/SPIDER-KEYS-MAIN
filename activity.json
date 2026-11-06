@@ -1,3 +1,10 @@
 {
-  "entries": []
+  "entries": [
+    {
+      "ts": "2026-11-06T09:28:29.129Z",
+      "actor": "admin",
+      "action": "login",
+      "detail": "152.59.51.43"
+    }
+  ]
 }
