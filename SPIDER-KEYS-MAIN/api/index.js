@@ -524,6 +524,30 @@ module.exports = async (req, res) => {
       return ok(res, { message: 'Deleted!', key: deleted });
     }
 
+    if (action === 'delete_expired_keys') {
+      const now = Date.now();
+      let deleted = [];
+      await mutate(
+        FILES.keys,
+        (data) => {
+          deleted = [];
+          for (const [key, record] of Object.entries(data)) {
+            if (!record || !record.expires_at || record.expires_at === 'null') continue;
+            const expires = new Date(record.expires_at).getTime();
+            if (Number.isFinite(expires) && expires < now) {
+              delete data[key];
+              deleted.push(key);
+            }
+          }
+          return deleted.length > 0;
+        },
+        'Delete expired keys'
+      );
+      if (!deleted.length) return ok(res, { deleted: 0 });
+      await logActivity('admin', 'expired keys deleted', `${deleted.length} key(s)`);
+      return ok(res, { deleted: deleted.length });
+    }
+
     if (action === 'reset_device') {
       const key = String(body.key || '').trim();
       if (!key) return fail(res, 'Key required!', 400);
