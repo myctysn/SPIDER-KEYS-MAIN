@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-06T09:29:25.932Z",
+      "actor": "admin",
+      "action": "keys generated",
+      "detail": "1x normal dsds"
+    },
+    {
       "ts": "2026-11-06T09:28:29.129Z",
       "actor": "admin",
       "action": "login",
