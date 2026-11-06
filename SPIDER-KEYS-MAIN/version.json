@@ -1,0 +1,29 @@
+{
+  "version": "3.7",
+  "mods": {
+    "mod_menu": {
+      "label": "Yash X Prime Mod Menu",
+      "zip_url": "https://github.com/solankiyashrajsinh922-cyber/loader-keys/releases/download/V1.0/payload_mod.zip"
+    },
+    "room": {
+      "label": "Room Unlock Mod",
+      "zip_url": "https://github.com/solankiyashrajsinh922-cyber/loader-keys/releases/download/V1.0/payload_room.zip"
+    }
+  },
+  "locked_mods": [],
+  "zip_password": "0000000000000000",
+  "lib_name": "libil2cpp.so",
+  "keys_url": "https://raw.githubusercontent.com/solankiyashrajsinh922-cyber/loader-keys/main/keys.json",
+  "maintenance": false,
+  "maintenance_msg": "Injection is currently under maintenance.\nPlease try again later.",
+  "force_update": false,
+  "min_version": "1.0",
+  "credit_rates": {
+    "time_based": 1,
+    "lifetime": 2
+  },
+  "mod_features": {
+    "mod_menu": "===================================\n        MOD MENU FUNCTIONS         \n===================================\n\n[ TAB: ESP ]\n• ESP Line\n• ESP Name\n• ESP Box\n• ESP Skeleton\n• ESP Distance\n• ESP Object\n• Crosshair\n\n[ TAB: AIM ]\n• 100% Zero Recoil\n• Normal Aimbot\n• bullet treck \n\n[ TAB: OTHER ]\n• Remove Trees\n• Remove Grass\n• Remove Textures\n• Fly Mode\n• Soul Mode\n• Wall Hack\n• Under Water Walk\n• Force Build\n• Always Day\n• Nife Treck\n\n[ AUTO FARM ]\n• Auto Farm Tree\n• Auto Farm Stone\n• Auto Farm Iron\n• Auto Farm Sulfur\n• Auto Farm Titan\n\n[ FREEZE OPTIONS ]\n• Freeze Zombies\n• Freeze Tank\n• Freeze Heli\n• Freeze Turret\n• Freeze Electric Turret\n\n[ TAB: SERVER ]\n• Device Unban\n• Strong Bypass (Safe)\n• Social Sarver Unlock \n• Open Room Without Card\n\n• You Can Use Fast Hit (Nife Treck)\nFor Fast Farming\n===================================\n\nMore Functions Are Coming Soon...\n\nSupport - https://t.me/Yash_X_Prime\nOwner - @YashXPrime1025\nBUY KEY : DM - @YashXPrime1025",
+    "room": "━━━━━━━━━━━━━━━━━━━━━━\n🔥 ROOM UNLOCK FEATURES 🔥\n◈ 📍 Player Location\n◈ 🏗 Forced Build (Fixed)\n◈ 🛡 Advanced Bypass\n◈ 👾 Stop Monster Attack\n◈ 🚀 Stop Tank/Heli Fire\n◈ ⛅ Always Day\n━━━━━━━━━━━━━━━━━━━━━━"
+  }
+}

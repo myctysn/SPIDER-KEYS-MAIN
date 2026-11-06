@@ -1,0 +1,7 @@
+{
+  "name": "yash-x-prime-api",
+  "version": "2.0.0",
+  "dependencies": {
+    "@octokit/rest": "^19.0.0"
+  }
+}

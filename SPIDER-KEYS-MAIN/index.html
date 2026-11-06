@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SPIDER-MODS — Control Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060a;--s1:#0c0c12;--s2:#12121b;--s3:#191924;
+  --line:#1f1f2c;--line2:#2c2c40;
+  --red:#ff2b3d;--red2:#c8101f;--red-dim:rgba(255,43,61,.1);
+  --green:#22e07a;--amber:#ffb020;--blue:#5b8cff;--violet:#a855f7;
+  --text:#f4f4fa;--muted:#8d8da8;--dim:#4c4c66;
+  --mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;
+}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:48px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle at 50% -12%,rgba(255,43,61,.16),transparent 55%),
+    repeating-conic-gradient(from 0deg at 50% -10%,rgba(255,255,255,.045) 0deg .18deg,transparent .18deg 14deg),
+    repeating-radial-gradient(circle at 50% -10%,transparent 0 58px,rgba(255,255,255,.03) 58px 59px);
+  opacity:.75}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 50% 0%,transparent 30%,var(--bg) 78%)}
+.mono{font-family:var(--mono)}
+.wrap{position:relative;z-index:1}
+
+/* login */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:100%;max-width:380px;background:rgba(12,12,18,.92);border:1px solid var(--line2);
+  border-radius:20px;padding:34px 28px;text-align:center;backdrop-filter:blur(12px);
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,43,61,.08) inset}
+.logo-ring{width:78px;height:78px;margin:0 auto 18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--red);background:radial-gradient(circle,rgba(255,43,61,.18),rgba(255,43,61,.02));
+  border:1px solid rgba(255,43,61,.3);box-shadow:0 0 34px rgba(255,43,61,.22)}
+.logo-ring svg{width:44px;height:44px}
+.brand-name{font-size:26px;font-weight:700;letter-spacing:3px;line-height:1}
+.brand-name span{color:var(--red)}
+.brand-sub{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--dim);margin-top:8px}
+.login-note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6}
+
+/* shell */
+.topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;background:rgba(8,8,13,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .mark{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--red);background:var(--red-dim);border:1px solid rgba(255,43,61,.28)}
+.brand .mark svg{width:22px;height:22px}
+.brand-name-sm{font-size:15px;font-weight:700;letter-spacing:2px;line-height:1.1}
+.brand-name-sm span{color:var(--red)}
+.brand-sub-sm{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--dim);margin-top:3px}
+.live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,224,122,.5);animation:pulse 2s infinite}
+.dot.off{background:var(--red);animation:none;box-shadow:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,224,122,.4)}50%{box-shadow:0 0 0 6px rgba(34,224,122,0)}}
+.top-actions{display:flex;align-items:center;gap:8px}
+nav.tabs{position:sticky;top:61px;z-index:55;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+  padding:8px 14px;background:rgba(8,8,13,.8);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 14px;border-radius:9px;border:1px solid transparent;background:none;color:var(--muted);
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.2px;cursor:pointer;transition:.18s}
+.tab:hover{color:var(--text);background:var(--s2)}
+.tab.active{color:#fff;background:var(--red-dim);border-color:rgba(255,43,61,.35);box-shadow:0 0 18px rgba(255,43,61,.12) inset}
+main{padding:18px;max-width:1180px;margin:0 auto;position:relative;z-index:1}
+section{display:none;animation:fade .25s ease}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hidden{display:none!important}
+
+/* basics */
+.card{background:linear-gradient(180deg,var(--s1),rgba(12,12,18,.96));border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--dim)}
+.h2{font-size:17px;font-weight:700;letter-spacing:.5px}
+.lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin:14px 0 6px}
+.lbl:first-of-type{margin-top:0}
+.inp,select,textarea{width:100%;background:var(--s2);border:1px solid var(--line2);border-radius:10px;color:var(--text);
+  font-family:var(--mono);font-size:13px;padding:11px 12px;outline:none;transition:.18s}
+textarea{resize:vertical;line-height:1.55;font-size:12px}
+.inp:focus,select:focus,textarea:focus{border-color:rgba(255,43,61,.45);box-shadow:0 0 0 3px rgba(255,43,61,.08)}
+.inp::placeholder{color:var(--dim)}
+select option{background:var(--s2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:10px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:11px 16px;transition:.16s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 8px 24px rgba(255,43,61,.25)}
+.btn-red:hover{background:#ff4050}
+.btn-ghost{background:var(--s2);color:var(--muted);border:1px solid var(--line2)}
+.btn-ghost:hover{color:var(--text);border-color:#3a3a52}
+.btn-danger{background:rgba(255,43,61,.1);color:var(--red);border:1px solid rgba(255,43,61,.3)}
+.btn-ok{background:rgba(34,224,122,.1);color:var(--green);border:1px solid rgba(34,224,122,.3)}
+.btn-full{width:100%;margin-top:16px;padding:13px}
+.btn-sm{padding:7px 11px;font-size:9px;border-radius:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.muted{color:var(--muted)}
+.dim{color:var(--dim)}
+.small{font-size:11px}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-family:var(--mono);
+  font-size:8px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.t-green{background:rgba(34,224,122,.1);color:var(--green);border:1px solid rgba(34,224,122,.22)}
+.t-red{background:rgba(255,43,61,.1);color:var(--red);border:1px solid rgba(255,43,61,.24)}
+.t-amber{background:rgba(255,176,32,.1);color:var(--amber);border:1px solid rgba(255,176,32,.22)}
+.t-blue{background:rgba(91,140,255,.1);color:var(--blue);border:1px solid rgba(91,140,255,.24)}
+.t-grey{background:var(--s3);color:var(--muted);border:1px solid var(--line2)}
+.empty{padding:34px 12px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:1px}
+.loading{padding:26px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.note{padding:11px 13px;border-radius:10px;font-family:var(--mono);font-size:11px;line-height:1.6;display:none;margin-top:12px;white-space:pre-line}
+.note.show{display:block}
+.note.ok{background:rgba(34,224,122,.07);border:1px solid rgba(34,224,122,.22);color:var(--green)}
+.note.err{background:rgba(255,43,61,.07);border:1px solid rgba(255,43,61,.22);color:var(--red)}
+
+/* stats */
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:15px 13px}
+.stat::after{content:'';position:absolute;inset:0 auto 0 0;width:2px;background:var(--red);opacity:.6}
+.stat .n{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.5px}
+.stat .l{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--dim);margin-top:6px}
+.stat.green .n{color:var(--green)} .stat.red .n{color:var(--red)} .stat.blue .n{color:var(--blue)} .stat.amber .n{color:var(--amber)} .stat.violet .n{color:var(--violet)}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+
+/* keys */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar .inp{flex:1;min-width:170px}
+.chip{background:var(--s2);border:1px solid var(--line2);color:var(--muted);border-radius:8px;padding:7px 11px;
+  font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.15s}
+.chip:hover{color:var(--text)}
+.chip.on{background:var(--red-dim);border-color:rgba(255,43,61,.4);color:#fff}
+.key-row{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:12px;
+  background:var(--s2);margin-bottom:7px;transition:.15s}
+.key-row:hover{border-color:var(--line2)}
+.key-row.dead{opacity:.55}
+.key-code{font-size:12px;font-weight:700;color:var(--text);word-break:break-all;cursor:pointer}
+.key-code:hover{color:var(--red)}
+.key-meta{font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px;line-height:1.6}
+.key-body{flex:1;min-width:0}
+.key-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.key-acts{display:flex;gap:5px;flex-shrink:0}
+
+/* resellers */
+.r-card{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:9px;transition:.15s}
+.r-card.banned{opacity:.62;border-color:rgba(255,43,61,.25)}
+.r-card.selected{border-color:rgba(255,43,61,.5);box-shadow:0 0 0 1px rgba(255,43,61,.18)}
+.r-top{display:flex;align-items:center;gap:10px}
+.r-check{width:17px;height:17px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
+.r-id{flex:1;min-width:0}
+.r-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.r-slug{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:1px}
+.r-cred{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green);white-space:nowrap}
+.r-meta{font-family:var(--mono);font-size:9px;color:var(--dim);margin:9px 0;display:flex;gap:12px;flex-wrap:wrap}
+.r-toggles{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.tg{border-radius:8px;padding:5px 9px;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.8px;cursor:pointer;border:1px solid var(--line2);background:var(--bg);color:var(--dim)}
+.tg.on{color:var(--green);border-color:rgba(34,224,122,.35);background:rgba(34,224,122,.08)}
+.tg.mm.on{color:var(--amber);border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.08)}
+.tg.vx.on{color:var(--violet);border-color:rgba(168,85,247,.35);background:rgba(168,85,247,.08)}
+.r-acts{display:flex;gap:5px;flex-wrap:wrap}
+.bulkbar{display:none;align-items:center;gap:7px;flex-wrap:wrap;padding:11px;border:1px solid rgba(255,43,61,.35);
+  background:rgba(255,43,61,.07);border-radius:12px;margin-bottom:10px}
+.bulkbar.show{display:flex}
+.bulk-count{font-family:var(--mono);font-size:10px;color:var(--red);font-weight:700;margin-right:4px}
+.empty-state{border:1px dashed var(--line2);border-radius:14px;padding:30px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px}
+
+/* locks + activity */
+.lock-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--s2);margin-bottom:7px}
+.lock-name{flex:1;font-size:13px}
+.act-row{display:flex;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px}
+.act-time{color:var(--dim);white-space:nowrap}
+.act-actor{color:var(--red);min-width:70px}
+.act-action{color:var(--text);min-width:110px}
+.act-detail{color:var(--muted);word-break:break-all}
+
+/* toggle switch */
+.switch{position:relative;width:46px;height:25px;flex-shrink:0;cursor:pointer}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.slider{position:absolute;inset:0;background:#2a1418;border:1px solid rgba(255,43,61,.3);border-radius:25px;transition:.25s}
+.slider::before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;border-radius:50%;background:var(--red);transition:.25s}
+.switch input:checked + .slider{background:rgba(34,224,122,.12);border-color:rgba(34,224,122,.35)}
+.switch input:checked + .slider::before{transform:translateX(21px);background:var(--green)}
+
+/* modal + toast */
+.overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px;
+  background:rgba(2,2,5,.8);backdrop-filter:blur(6px)}
+.overlay.show{display:flex}
+.modal{width:100%;max-width:380px;background:var(--s1);border:1px solid var(--line2);border-radius:18px;padding:22px;
+  box-shadow:0 40px 100px rgba(0,0,0,.7);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:14px}
+.modal-acts{display:flex;gap:8px;margin-top:16px}
+.modal-acts .btn{flex:1}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,14px);z-index:300;background:var(--s3);
+  border:1px solid var(--line2);border-left:3px solid var(--red);color:var(--text);font-family:var(--mono);
+  font-size:11px;padding:11px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.22s;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:820px){
+  .stats{grid-template-columns:1fr 1fr}
+  .cols{grid-template-columns:1fr}
+  main{padding:12px}
+  .grid3,.grid4{grid-template-columns:1fr 1fr}
+  .key-acts{flex-direction:column}
+}
+@media(max-width:520px){
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .key-row{flex-wrap:wrap}
+  .key-acts{flex-direction:row;width:100%}
+  .key-acts .btn{flex:1}
+  nav.tabs{top:57px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LOGIN -->
+<div id="loginView" class="login">
+  <form class="login-card" onsubmit="doLogin(event)">
+    <div class="logo-ring">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="12" cy="8.6" r="2.2" fill="currentColor" stroke="none"/>
+        <ellipse cx="12" cy="15.1" rx="3" ry="4.1" fill="currentColor" stroke="none"/>
+        <path d="M9.8 7.2 5.6 4M9.1 9.4 4 8M9.3 11.9 4.1 13.3M9.7 14.3 5.7 17.5M14.2 7.2 18.4 4M14.9 9.4 20 8M14.7 11.9 19.9 13.3M14.3 14.3 18.3 17.5"/>
+      </svg>
+    </div>
+    <div class="brand-name">SPIDER<span>-MODS</span></div>
+    <div class="brand-sub">CONTROL CENTER</div>
+    <div style="margin-top:24px;text-align:left">
+      <span class="lbl">ADMIN PASSWORD</span>
+      <input class="inp" id="adminPass" type="password" placeholder="Enter password" autocomplete="current-password"/>
+      <button class="btn btn-red btn-full" type="submit" id="loginBtn">ENTER CONSOLE →</button>
+      <div class="note" id="loginNote"></div>
+    </div>
+    <div class="login-note">Protected by signed sessions · 12 hour expiry<br/>Failed attempts are rate limited</div>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="12" cy="8.6" r="2.2" fill="currentColor" stroke="none"/>
+          <ellipse cx="12" cy="15.1" rx="3" ry="4.1" fill="currentColor" stroke="none"/>
+          <path d="M9.8 7.2 5.6 4M9.1 9.4 4 8M9.3 11.9 4.1 13.3M9.7 14.3 5.7 17.5M14.2 7.2 18.4 4M14.9 9.4 20 8M14.7 11.9 19.9 13.3M14.3 14.3 18.3 17.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name-sm">SPIDER<span>-MODS</span></div>
+        <div class="brand-sub-sm">ADMIN</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="live"><span class="dot" id="liveDot"></span><span id="liveText">ONLINE</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">LOGOUT</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">DASHBOARD</button>
+    <button class="tab" data-tab="keys">KEYS</button>
+    <button class="tab" data-tab="generate">GENERATE</button>
+    <button class="tab" data-tab="resellers">RESELLERS</button>
+    <button class="tab" data-tab="locks">MOD LOCKS</button>
+    <button class="tab" data-tab="features">FEATURES</button>
+    <button class="tab" data-tab="activity">ACTIVITY</button>
+    <button class="tab" data-tab="settings">SETTINGS</button>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="active">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">NETWORK OVERVIEW</div>
+          <div class="h2" style="margin-top:5px">Everything at a glance</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="tag" id="maintTag">MAINTENANCE OFF</span>
+          <label class="switch"><input type="checkbox" id="maintSwitch" onchange="toggleMaintenance(this.checked)"/><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="stats" id="statsGrid"></div>
+      <div class="cols">
+        <div class="card">
+          <div class="card-head"><div class="eyebrow">RECENT KEYS</div><button class="btn btn-ghost btn-sm" onclick="switchTab('keys')">VIEW ALL</button></div>
+          <div id="recentKeys" class="loading">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="eyebrow">TOP RESELLERS</div><button class="btn btn-ghost btn-sm" onclick="switchTab('resellers')">MANAGE</button></div>
+          <div id="topResellers" class="loading">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEYS -->
+    <section id="tab-keys">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">KEY INVENTORY</div><div class="h2" style="margin-top:4px" id="keyCount">0 keys</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadKeys()">REFRESH</button>
+        </div>
+        <div class="toolbar">
+          <input class="inp" id="keySearch" placeholder="Search key, label or reseller..." oninput="renderKeys()"/>
+          <button class="chip on" data-filter="all" onclick="setKeyFilter(this)">ALL</button>
+          <button class="chip" data-filter="valid" onclick="setKeyFilter(this)">VALID</button>
+          <button class="chip" data-filter="expired" onclick="setKeyFilter(this)">EXPIRED</button>
+          <button class="chip" data-filter="locked" onclick="setKeyFilter(this)">LOCKED</button>
+          <button class="chip" data-filter="mod_menu" onclick="setKeyFilter(this)">MOD MENU</button>
+          <button class="chip" data-filter="vortex" onclick="setKeyFilter(this)">VORTEX</button>
+        </div>
+        <div id="keysList" class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <!-- GENERATE -->
+    <section id="tab-generate">
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">KEY FACTORY</div><div class="h2" style="margin-top:4px">Create SPIDER keys</div></div></div>
+        <span class="lbl">KEY TYPE</span>
+        <select class="inp" id="genType">
+          <option value="normal">SPIDER-N · Normal Key</option>
+          <option value="mod_menu">SPIDER-MM · Mod Menu Key</option>
+          <option value="vortex">SPIDER-VX · Vortex Key</option>
+        </select>
+        <span class="lbl">DURATION & QUANTITY</span>
+        <div class="grid3">
+          <input class="inp" id="genDur" type="number" value="10" min="1"/>
+          <select class="inp" id="genUnit">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days" selected>Days</option>
+            <option value="months">Months</option>
+            <option value="lifetime">Lifetime</option>
+          </select>
+          <input class="inp" id="genQty" type="number" value="1" min="1" max="50" placeholder="Qty"/>
+        </div>
+        <span class="lbl">MAX DEVICES</span>
+        <div class="grid2">
+          <select class="inp" id="genDevices" onchange="document.getElementById('genDevCustom').classList.toggle('hidden',this.value!=='custom')">
+            <option value="1">1 Device</option>
+            <option value="2">2 Devices</option>
+            <option value="3">3 Devices</option>
+            <option value="5">5 Devices</option>
+            <option value="10">10 Devices</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input class="inp hidden" id="genDevCustom" type="number" value="1" min="1" max="1000" placeholder="Custom"/>
+        </div>
+        <span class="lbl">LABEL (OPTIONAL)</span>
+        <input class="inp" id="genLabel" placeholder="e.g. Customer name"/>
+        <button class="btn btn-red btn-full" id="genBtn" onclick="generateKeys()">⚡ GENERATE KEY</button>
+        <div class="note" id="genNote"></div>
+      </div>
+      <div class="card hidden" id="genResult">
+        <div class="card-head">
+          <div class="eyebrow">GENERATED</div>
+          <button class="btn btn-ghost btn-sm" onclick="copyAllGenerated()">COPY ALL</button>
+        </div>
+        <div id="genList"></div>
+      </div>
+    </section>
+
+    <!-- RESELLERS -->
+    <section id="tab-resellers">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">NEW ACCOUNT</div><div class="h2" style="margin-top:4px">Create reseller</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('createBox').classList.toggle('hidden')">SHOW / HIDE</button>
+        </div>
+        <div id="createBox">
+          <div class="grid2">
+            <div><span class="lbl">USERNAME</span><input class="inp" id="newSlug" placeholder="e.g. nova"/></div>
+            <div><span class="lbl">DISPLAY NAME</span><input class="inp" id="newName" placeholder="e.g. Nova Store"/></div>
+          </div>
+          <div class="grid2">
+            <div><span class="lbl">PASSWORD (8+ CHARS)</span><input class="inp" id="newPass" type="text" placeholder="Set a strong password"/></div>
+            <div><span class="lbl">STARTING CREDITS</span><input class="inp" id="newCredits" type="number" value="10" min="0"/></div>
+          </div>
+          <button class="btn btn-red btn-full" onclick="createReseller()">+ CREATE RESELLER</button>
+          <div class="note" id="createNote"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">RESELLER NETWORK</div><div class="h2" style="margin-top:4px" id="resellerCount">0 resellers</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadResellers()">REFRESH</button>
+        </div>
+        <div class="toolbar">
+          <input class="inp" id="resellerSearch" placeholder="Search name or username..." oninput="renderResellers()"/>
+          <button class="chip on" data-rfilter="all" onclick="setResellerFilter(this)">ALL</button>
+          <button class="chip" data-rfilter="active" onclick="setResellerFilter(this)">ACTIVE</button>
+          <button class="chip" data-rfilter="banned" onclick="setResellerFilter(this)">BANNED</button>
+        </div>
+        <div class="bulkbar" id="bulkBar">
+          <span class="bulk-count" id="bulkCount">0 selected</span>
+          <button class="btn btn-ghost btn-sm" onclick="bulkCredits('add_credits')">+ CREDITS</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulkCredits('remove_credits')">- CREDITS</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('allow_normal')">NORMAL ON</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('deny_normal')">NORMAL OFF</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('allow_mod_menu')">MOD ON</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('deny_mod_menu')">MOD OFF</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('allow_vortex')">VORTEX ON</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('deny_vortex')">VORTEX OFF</button>
+          <button class="btn btn-ok btn-sm" onclick="bulk('unban')">UNBAN</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('ban')">BAN</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulk('revoke_sessions')">REVOKE</button>
+          <button class="btn btn-danger btn-sm" onclick="bulk('delete')">DELETE</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearSelection()">CLEAR</button>
+        </div>
+        <div id="resellersList" class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <!-- MOD LOCKS -->
+    <section id="tab-locks">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">MOD DELIVERY</div><div class="h2" style="margin-top:4px">Lock mods globally</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadLocks()">REFRESH</button>
+        </div>
+        <p class="small muted" style="margin-bottom:14px">A locked mod is removed from every validation response, so no key can download it until you unlock it.</p>
+        <div id="locksList" class="loading">Loading...</div>
+        <div class="note" id="locksNote"></div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="tab-features">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">IN-APP COPY</div><div class="h2" style="margin-top:4px">Mod feature text</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadFeatures()">REFRESH</button>
+        </div>
+        <p class="small muted" style="margin-bottom:14px">Shown inside the app when a user opens each mod. One field per mod in version.json.</p>
+        <div id="featureFields" class="loading">Loading...</div>
+        <button class="btn btn-red btn-full" onclick="saveFeatures()">💾 SAVE FEATURES</button>
+        <div class="note" id="featuresNote"></div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section id="tab-activity">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">AUDIT TRAIL</div><div class="h2" style="margin-top:4px" id="activityCount">Activity log</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadActivity()">REFRESH</button>
+        </div>
+        <div id="activityList" class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings">
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">SERVICE STATE</div><div class="h2" style="margin-top:4px">Maintenance</div></div></div>
+        <div class="row" style="border:none;padding-top:0">
+          <div><div style="font-size:13px">Take the loader offline</div><div class="small dim">Every validation request gets your maintenance message.</div></div>
+          <label class="switch"><input type="checkbox" id="maintSwitch2" onchange="toggleMaintenance(this.checked)"/><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">SECURITY</div><div class="h2" style="margin-top:4px">Session</div></div></div>
+        <div class="row"><span class="small muted">Signed in as</span><span class="mono small">ADMINISTRATOR</span></div>
+        <div class="row"><span class="small muted">Session lifetime</span><span class="mono small">12 HOURS</span></div>
+        <div class="row"><span class="small muted">Token type</span><span class="mono small">HMAC-SHA256</span></div>
+        <div class="row"><span class="small muted">Password hashing</span><span class="mono small">SCRYPT</span></div>
+        <button class="btn btn-danger btn-full" onclick="logout()">END SESSION</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">DEPLOYMENT</div><div class="h2" style="margin-top:4px">Admin credentials</div></div></div>
+        <p class="small muted" style="line-height:1.7">The admin password lives in Vercel, never in this page or the repository. To rotate it, change <span class="mono">ADMIN_PASSWORD</span> and redeploy. Changing <span class="mono">SESSION_SECRET</span> instantly invalidates every admin session. Reseller passwords are stored as scrypt hashes and can be reset per account from the reseller card.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modalCard"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+</div>
+<script>
+const API = location.protocol === 'file:' ? 'https://loader-keys.vercel.app/api' : location.origin + '/api';
+const TOKEN_KEY = 'spider_admin_token';
+let TOKEN = sessionStorage.getItem(TOKEN_KEY) || '';
+const S = { keys: {}, resellers: {}, activity: [], overview: null, keyFilter: 'all', resellerFilter: 'all', selected: new Set(), generated: [] };
+
+/* ── http ── */
+async function api(action, body) {
+  const headers = {};
+  if (body) headers['Content-Type'] = 'application/json';
+  if (TOKEN) headers.Authorization = 'Bearer ' + TOKEN;
+  let response;
+  try {
+    response = await fetch(API + '?action=' + encodeURIComponent(action), {
+      method: body ? 'POST' : 'GET',
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch { throw new Error('Network error. Check your connection.'); }
+  let data;
+  try { data = await response.json(); } catch { throw new Error('Invalid server response.'); }
+  if (response.status === 401 && action !== 'admin_login') {
+    logout(true);
+    throw new Error(data.message || 'Session expired.');
+  }
+  return data;
+}
+
+/* ── auth ── */
+async function doLogin(event) {
+  event.preventDefault();
+  const input = document.getElementById('adminPass');
+  const btn = document.getElementById('loginBtn');
+  const password = input.value;
+  if (!password) return showNote('loginNote', 'Enter your password.', 'err');
+  btn.disabled = true;
+  btn.textContent = 'CHECKING...';
+  try {
+    const data = await api('admin_login', { password });
+    if (!data.success) return showNote('loginNote', data.message || 'Login failed.', 'err');
+    TOKEN = data.token;
+    sessionStorage.setItem(TOKEN_KEY, TOKEN);
+    input.value = '';
+    enterApp();
+  } catch (err) {
+    showNote('loginNote', err.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ENTER CONSOLE →';
+  }
+}
+
+function enterApp() {
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  loadDashboard();
+  loadKeys();
+  loadResellers();
+}
+
+function logout(expired) {
+  TOKEN = '';
+  sessionStorage.removeItem(TOKEN_KEY);
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('loginView').classList.remove('hidden');
+  if (expired) showNote('loginNote', 'Session expired. Log in again.', 'err');
+}
+
+async function boot() {
+  if (!TOKEN) return;
+  try {
+    const data = await api('admin_session');
+    if (data.success) enterApp();
+    else logout();
+  } catch { logout(); }
+}
+
+/* ── navigation ── */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
+  document.querySelectorAll('section').forEach((section) => section.classList.toggle('active', section.id === 'tab-' + name));
+  if (name === 'locks') loadLocks();
+  if (name === 'features') loadFeatures();
+  if (name === 'activity') loadActivity();
+  if (name === 'dashboard') loadDashboard();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
+
+/* ── dashboard ── */
+async function loadDashboard() {
+  try {
+    const data = await api('get_overview');
+    if (!data.success) return;
+    S.overview = data;
+    const stats = data.stats;
+    document.getElementById('statsGrid').innerHTML = [
+      ['TOTAL KEYS', stats.total, ''],
+      ['VALID', stats.valid, 'green'],
+      ['EXPIRED', stats.expired, 'red'],
+      ['DEVICE LOCKED', stats.locked, 'blue'],
+      ['RESELLERS', stats.resellers, 'violet'],
+      ['SUSPENDED', stats.banned, 'red'],
+      ['CREDITS IN CIRCULATION', stats.credits, 'amber'],
+      ['LIFETIME KEYS', stats.lifetime, ''],
+    ].map(([label, value, tone]) => `<div class="stat ${tone}"><div class="n">${value}</div><div class="l">${label}</div></div>`).join('');
+
+    const recent = data.recent || [];
+    document.getElementById('recentKeys').innerHTML = recent.length
+      ? recent.map((k) => `<div class="row"><div style="min-width:0"><div class="mono" style="font-size:11px;word-break:break-all">${esc(k.key)}</div><div class="key-meta">${esc(k.label || '—')} · ${esc(k.reseller || 'admin')}</div></div><span class="tag ${isLive(k) ? 't-green' : 't-red'}">${isLive(k) ? 'VALID' : 'EXPIRED'}</span></div>`).join('')
+      : '<div class="empty">No keys yet</div>';
+
+    const top = data.top_resellers || [];
+    document.getElementById('topResellers').innerHTML = top.length
+      ? top.map((r) => `<div class="row"><div><div style="font-size:12px;font-weight:700">${esc(r.name)}</div><div class="key-meta">@${esc(r.username)}</div></div><div style="text-align:right"><div class="mono" style="font-size:12px;color:var(--green)">${r.credits} CR</div><div class="key-meta">${r.total_keys_generated} keys</div></div></div>`).join('')
+      : '<div class="empty">No resellers yet</div>';
+    setMaintenanceUI(data.maintenance);
+  } catch (err) { toast(err.message); }
+}
+
+/* ── keys ── */
+async function loadKeys() {
+  try {
+    const data = await api('get_keys');
+    if (!data.success) return;
+    S.keys = data.keys || {};
+    renderKeys();
+  } catch (err) { toast(err.message); }
+}
+
+function isLive(record) {
+  if (!record) return false;
+  if (record.expires_at && record.expires_at !== 'null') return new Date(record.expires_at).getTime() > Date.now();
+  return true;
+}
+
+function setKeyFilter(button) {
+  document.querySelectorAll('[data-filter]').forEach((el) => el.classList.toggle('on', el === button));
+  S.keyFilter = button.dataset.filter;
+  renderKeys();
+}
+
+function renderKeys() {
+  const query = (document.getElementById('keySearch')?.value || '').trim().toLowerCase();
+  const filter = S.keyFilter;
+  const now = Date.now();
+  let entries = Object.entries(S.keys);
+  entries = entries.filter(([key, record]) => {
+    const exp = record.expires_at && record.expires_at !== 'null' ? new Date(record.expires_at).getTime() : null;
+    const live = !exp || now < exp;
+    const locked = Boolean(record.device_id) || (record.connected_devices && record.connected_devices.length > 0);
+    const type = record.key_type || 'normal';
+    if (filter === 'valid' && !live) return false;
+    if (filter === 'expired' && live) return false;
+    if (filter === 'locked' && !locked) return false;
+    if ((filter === 'mod_menu' || filter === 'vortex') && type !== filter) return false;
+    if (query) {
+      const haystack = `${key} ${record.label || ''} ${record.reseller || ''} ${type}`.toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+    return true;
+  });
+  entries.sort((a, b) => new Date(b[1].created_at || 0) - new Date(a[1].created_at || 0));
+  const count = document.getElementById('keyCount');
+  if (count) count.textContent = `${entries.length} of ${Object.keys(S.keys).length} keys`;
+  const list = document.getElementById('keysList');
+  if (!entries.length) { list.innerHTML = '<div class="empty">NO KEYS MATCH THIS VIEW</div>'; return; }
+  list.innerHTML = entries.map(([key, record]) => {
+    const exp = record.expires_at && record.expires_at !== 'null' ? new Date(record.expires_at) : null;
+    const live = !exp || exp.getTime() > now;
+    const devices = Array.isArray(record.connected_devices) ? record.connected_devices : (record.device_id ? [record.device_id] : []);
+    const type = record.key_type || 'normal';
+    const typeTag = type === 'mod_menu' ? 't-amber' : type === 'vortex' ? 't-blue' : 't-grey';
+    return `<div class="key-row ${live ? '' : 'dead'}">
+      <div class="key-body">
+        <div class="key-code mono" onclick="copyText('${esc(key)}')">${esc(key)}</div>
+        <div class="key-meta">${esc(record.label || '—')} · ${esc(record.reseller || 'admin')} · ${exp ? 'expires ' + fmtDate(exp) : 'lifetime'}</div>
+        <div class="key-tags">
+          <span class="tag ${live ? 't-green' : 't-red'}">${live ? 'VALID' : 'EXPIRED'}</span>
+          <span class="tag ${typeTag}">${type.toUpperCase().replace('_', ' ')}</span>
+          <span class="tag ${devices.length ? 't-blue' : 't-grey'}">${devices.length}/${record.max_devices || 1} DEVICES</span>
+          ${live && exp ? `<span class="tag t-grey">${timeLeft(exp - now)}</span>` : ''}
+        </div>
+      </div>
+      <div class="key-acts">
+        ${devices.length ? `<button class="btn btn-ghost btn-sm" onclick="resetKey('${esc(key)}')">RESET</button>` : ''}
+        <button class="btn btn-danger btn-sm" onclick="deleteKey('${esc(key)}')">DEL</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function resetKey(key) {
+  if (!(await askConfirm('Reset devices?', key, 'RESET'))) return;
+  try {
+    const data = await api('reset_device', { key });
+    toast(data.success ? 'Devices reset' : data.message);
+    if (data.success) loadKeys();
+  } catch (err) { toast(err.message); }
+}
+
+async function deleteKey(key) {
+  if (!(await askConfirm('Delete this key?', key, 'DELETE'))) return;
+  try {
+    const data = await api('delete_key', { key });
+    toast(data.success ? 'Key deleted' : data.message);
+    if (data.success) { loadKeys(); loadDashboard(); }
+  } catch (err) { toast(err.message); }
+}
+
+/* ── generate ── */
+function calcExpiry(value, unit) {
+  if (unit === 'lifetime') return null;
+  const date = new Date();
+  if (unit === 'minutes') date.setMinutes(date.getMinutes() + value);
+  if (unit === 'hours') date.setHours(date.getHours() + value);
+  if (unit === 'days') date.setDate(date.getDate() + value);
+  if (unit === 'months') date.setMonth(date.getMonth() + value);
+  return date.toISOString();
+}
+
+async function generateKeys() {
+  const btn = document.getElementById('genBtn');
+  const qty = Math.min(Math.max(parseInt(document.getElementById('genQty').value, 10) || 1, 1), 50);
+  const deviceSelect = document.getElementById('genDevices').value;
+  const maxDevices = deviceSelect === 'custom' ? parseInt(document.getElementById('genDevCustom').value, 10) || 1 : parseInt(deviceSelect, 10);
+  const payload = {
+    key_type: document.getElementById('genType').value,
+    label: document.getElementById('genLabel').value.trim() || 'No Label',
+    expires_at: calcExpiry(parseInt(document.getElementById('genDur').value, 10) || 10, document.getElementById('genUnit').value),
+    max_devices: maxDevices,
+    qty,
+  };
+  btn.disabled = true;
+  btn.textContent = 'GENERATING...';
+  try {
+    const data = await api('add_key', payload);
+    if (!data.success) return showNote('genNote', data.message || 'Failed.', 'err');
+    S.generated = data.keys || [];
+    document.getElementById('genNote').classList.remove('show');
+    document.getElementById('genResult').classList.remove('hidden');
+    document.getElementById('genList').innerHTML = S.generated.map((key, index) => `<div class="key-row" style="margin-bottom:6px"><div class="key-body"><div class="key-code mono" onclick="copyText('${esc(key)}')">${esc(key)}</div></div><button class="btn btn-ghost btn-sm" onclick="copyText('${esc(key)}')">COPY</button></div>`).join('');
+    document.getElementById('genLabel').value = '';
+    toast(`${S.generated.length} key${S.generated.length > 1 ? 's' : ''} created`);
+    loadKeys();
+  } catch (err) {
+    showNote('genNote', err.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ GENERATE KEY';
+  }
+}
+
+function copyAllGenerated() {
+  if (!S.generated.length) return;
+  copyText(S.generated.join('\n'));
+}
+
+/* ── resellers ── */
+async function loadResellers() {
+  try {
+    const data = await api('get_resellers');
+    if (!data.success) return;
+    S.resellers = data.resellers || {};
+    S.selected.clear();
+    renderResellers();
+  } catch (err) { toast(err.message); }
+}
+
+function setResellerFilter(button) {
+  document.querySelectorAll('[data-rfilter]').forEach((el) => el.classList.toggle('on', el === button));
+  S.resellerFilter = button.dataset.rfilter;
+  renderResellers();
+}
+
+function renderResellers() {
+  const query = (document.getElementById('resellerSearch')?.value || '').trim().toLowerCase();
+  const filter = S.resellerFilter;
+  let entries = Object.entries(S.resellers);
+  entries = entries.filter(([slug, r]) => {
+    if (filter === 'active' && !r.active) return false;
+    if (filter === 'banned' && r.active) return false;
+    if (query && !`${slug} ${r.name || ''}`.toLowerCase().includes(query)) return false;
+    return true;
+  });
+  entries.sort((a, b) => (a[1].active === b[1].active ? 0 : a[1].active ? -1 : 1) || b[1].credits - a[1].credits);
+  document.getElementById('resellerCount').textContent = `${entries.length} of ${Object.keys(S.resellers).length} resellers`;
+  const list = document.getElementById('resellersList');
+  if (!entries.length) { list.innerHTML = '<div class="empty-state">NO RESELLERS IN THIS VIEW</div>'; updateBulkBar(); return; }
+  list.innerHTML = entries.map(([slug, r]) => {
+    const selected = S.selected.has(slug);
+    return `<div class="r-card ${r.active ? '' : 'banned'} ${selected ? 'selected' : ''}">
+      <div class="r-top">
+        <input class="r-check" type="checkbox" ${selected ? 'checked' : ''} onchange="toggleSelect('${slug}', this.checked)"/>
+        <div class="r-id">
+          <div class="r-name">${esc(r.name)} ${r.active ? '' : '<span class="tag t-red">SUSPENDED</span>'}<span class="r-slug">@${slug}</span></div>
+        </div>
+        <div class="r-cred">${r.credits} CR</div>
+      </div>
+      <div class="r-meta">
+        <span>${r.total_keys_generated} keys made</span>
+        <span>${r.month_count}${r.monthly_limit ? '/' + r.monthly_limit : ''} this month</span>
+        <span>cap ${r.max_credits || '∞'} CR</span>
+        <span>${r.last_login ? 'last seen ' + fmtDate(new Date(r.last_login)) : 'never logged in'}</span>
+      </div>
+      <div class="r-toggles">
+        <button class="tg ${r.allow_normal ? 'on' : ''}" onclick="toggleReseller('${slug}','normal',${r.allow_normal})">NORMAL ${r.allow_normal ? 'ON' : 'OFF'}</button>
+        <button class="tg mm ${r.allow_mod_menu ? 'on' : ''}" onclick="toggleReseller('${slug}','mod_menu',${r.allow_mod_menu})">MOD ${r.allow_mod_menu ? 'ON' : 'OFF'}</button>
+        <button class="tg vx ${r.allow_vortex ? 'on' : ''}" onclick="toggleReseller('${slug}','vortex',${r.allow_vortex})">VORTEX ${r.allow_vortex ? 'ON' : 'OFF'}</button>
+      </div>
+      <div class="r-acts">
+        <button class="btn btn-ghost btn-sm" onclick="creditsModal('${slug}')">CREDITS</button>
+        <button class="btn btn-ghost btn-sm" onclick="limitsModal('${slug}')">LIMITS</button>
+        <button class="btn btn-ghost btn-sm" onclick="passwordModal('${slug}')">PASSWORD</button>
+        <button class="btn btn-ghost btn-sm" onclick="revokeSessions('${slug}')">SESSIONS</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyText(location.origin + '/${slug}/login')">LINK</button>
+        <button class="btn btn-ghost btn-sm" onclick="resellerKeysModal('${slug}')">KEYS</button>
+        <button class="btn ${r.active ? 'btn-ghost' : 'btn-ok'} btn-sm" onclick="toggleReseller('${slug}','active',${r.active})">${r.active ? 'BAN' : 'UNBAN'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteReseller('${slug}')">DEL</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateBulkBar();
+}
+
+function toggleSelect(slug, checked) {
+  if (checked) S.selected.add(slug); else S.selected.delete(slug);
+  renderResellers();
+}
+
+function clearSelection() {
+  S.selected.clear();
+  renderResellers();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulkBar');
+  if (!bar) return;
+  bar.classList.toggle('show', S.selected.size > 0);
+  document.getElementById('bulkCount').textContent = `${S.selected.size} selected`;
+}
+
+async function toggleReseller(slug, field, current) {
+  const actions = { normal: 'toggle_reseller_normal', mod_menu: 'toggle_reseller_mod_menu', vortex: 'toggle_reseller_vortex', active: 'toggle_reseller_active' };
+  const allowed = field === 'active' ? !current : !current;
+  try {
+    const data = await api(actions[field], { username: slug, allow: allowed });
+    if (!data.success) return toast(data.message || 'Failed');
+    const record = S.resellers[slug];
+    if (record) {
+      if (field === 'normal') record.allow_normal = data.allow_normal;
+      if (field === 'mod_menu') record.allow_mod_menu = data.allow_mod_menu;
+      if (field === 'vortex') record.allow_vortex = data.allow_vortex;
+      if (field === 'active') record.active = data.active;
+    }
+    toast(field === 'active' ? (allowed ? 'Reseller unbanned' : 'Reseller banned') : 'Permission updated');
+    renderResellers();
+  } catch (err) { toast(err.message); }
+}
+
+function creditsModal(slug) {
+  const record = S.resellers[slug];
+  openModal({
+    title: 'Manage credits',
+    sub: `@${slug} · ${record ? record.credits : 0} CR now`,
+    body: `<span class="lbl">AMOUNT</span><input class="inp" id="mAmount" type="number" value="10" min="1"/>`,
+    actions: [
+      { label: '- REMOVE', cls: 'btn-danger', onClick: (card) => changeCredits(slug, 'remove', card) },
+      { label: '+ ADD', cls: 'btn-ok', onClick: (card) => changeCredits(slug, 'add', card) },
+    ],
+  });
+}
+
+async function changeCredits(slug, mode, card) {
+  const amount = parseInt(card.querySelector('#mAmount').value, 10) || 0;
+  if (!amount) return toast('Enter an amount');
+  closeModal();
+  try {
+    const data = await api(mode === 'add' ? 'add_credits' : 'remove_credits', { username: slug, credits: amount });
+    toast(data.success ? `Credits updated · ${data.credits} CR` : data.message);
+    if (data.success) loadResellers();
+  } catch (err) { toast(err.message); }
+}
+
+function limitsModal(slug) {
+  const r = S.resellers[slug] || {};
+  const limits = r.limits || {};
+  openModal({
+    title: 'Account limits',
+    sub: `@${slug} · 0 means unlimited`,
+    body: `
+      <div class="grid2">
+        <div><span class="lbl">MAX CREDIT BALANCE</span><input class="inp" id="mMaxCredits" type="number" min="0" value="${r.max_credits || 0}"/></div>
+        <div><span class="lbl">KEYS PER MONTH</span><input class="inp" id="mMonthly" type="number" min="0" value="${r.monthly_limit || 0}"/></div>
+      </div>
+      <span class="lbl">TOTAL NORMAL KEYS</span><input class="inp" id="mLimNormal" type="number" min="0" value="${limits.normal || 0}"/>
+      <span class="lbl">TOTAL MOD MENU KEYS</span><input class="inp" id="mLimMod" type="number" min="0" value="${limits.mod_menu || 0}"/>
+      <span class="lbl">TOTAL VORTEX KEYS</span><input class="inp" id="mLimVortex" type="number" min="0" value="${limits.vortex || 0}"/>`,
+    actions: [{ label: 'SAVE LIMITS', cls: 'btn-red', onClick: (card) => saveLimits(slug, card) }],
+  });
+}
+
+async function saveLimits(slug, card) {
+  const read = (id) => Math.max(0, parseInt(card.querySelector('#' + id).value, 10) || 0);
+  const payload = {
+    username: slug,
+    max_credits: read('mMaxCredits'),
+    monthly_limit: read('mMonthly'),
+    limits: { normal: read('mLimNormal'), mod_menu: read('mLimMod'), vortex: read('mLimVortex') },
+  };
+  closeModal();
+  try {
+    const data = await api('update_reseller', payload);
+    toast(data.success ? 'Limits saved' : data.message);
+    if (data.success) loadResellers();
+  } catch (err) { toast(err.message); }
+}
+
+function passwordModal(slug) {
+  openModal({
+    title: 'Force password reset',
+    sub: `@${slug} · signs out every device`,
+    body: `<span class="lbl">NEW PASSWORD (8+ CHARACTERS)</span><input class="inp" id="mNewPass" type="text" placeholder="New password"/>`,
+    actions: [{ label: 'RESET PASSWORD', cls: 'btn-red', onClick: (card) => resetPassword(slug, card) }],
+  });
+}
+
+async function resetPassword(slug, card) {
+  const password = card.querySelector('#mNewPass').value;
+  if (password.length < 8) return toast('Use at least 8 characters');
+  closeModal();
+  try {
+    const data = await api('change_reseller_password', { username: slug, new_password: password });
+    toast(data.success ? 'Password reset · sessions revoked' : data.message);
+    if (data.success) loadResellers();
+  } catch (err) { toast(err.message); }
+}
+
+async function revokeSessions(slug) {
+  if (!(await askConfirm('Revoke all sessions?', `@${slug} will be logged out everywhere.`, 'REVOKE'))) return;
+  try {
+    const data = await api('revoke_reseller_sessions', { username: slug });
+    toast(data.success ? 'Sessions revoked' : data.message);
+  } catch (err) { toast(err.message); }
+}
+
+function resellerKeysModal(slug) {
+  const keys = Object.entries(S.keys).filter(([, record]) => record && record.reseller === slug);
+  openModal({
+    title: `${slug} keys`,
+    sub: `${keys.length} key${keys.length === 1 ? '' : 's'}`,
+    body: keys.length
+      ? `<div style="max-height:340px;overflow:auto">${keys.map(([key, record]) => `<div class="row"><div class="mono" style="font-size:10px;word-break:break-all">${esc(key)}</div><span class="tag ${isLive(record) ? 't-green' : 't-red'}">${isLive(record) ? 'LIVE' : 'DEAD'}</span></div>`).join('')}</div>`
+      : '<div class="empty">No keys</div>',
+    actions: [{ label: 'CLOSE', cls: 'btn-ghost', onClick: closeModal }],
+  });
+}
+
+async function deleteReseller(slug) {
+  if (!(await askConfirm('Delete reseller?', `@${slug} and their access will be removed. Their keys stay in the key list.`, 'DELETE'))) return;
+  try {
+    const data = await api('delete_reseller', { username: slug });
+    toast(data.success ? 'Reseller deleted' : data.message);
+    if (data.success) loadResellers();
+  } catch (err) { toast(err.message); }
+}
+
+async function bulk(op) {
+  const usernames = [...S.selected];
+  if (!usernames.length) return;
+  if (op === 'delete' && !(await askConfirm('Delete selected resellers?', `${usernames.length} account(s) will be removed.`, 'DELETE'))) return;
+  try {
+    const data = await api('bulk_reseller', { op, usernames });
+    toast(data.success ? `${data.affected} account(s) updated` : data.message);
+    if (data.success) loadResellers();
+  } catch (err) { toast(err.message); }
+}
+
+function bulkCredits(op) {
+  if (!S.selected.size) return;
+  openModal({
+    title: op === 'add_credits' ? 'Add credits' : 'Remove credits',
+    sub: `${S.selected.size} reseller(s)`,
+    body: `<span class="lbl">AMOUNT PER RESELLER</span><input class="inp" id="mBulkAmount" type="number" value="10" min="1"/>`,
+    actions: [{
+      label: op === 'add_credits' ? '+ ADD TO ALL' : '- REMOVE FROM ALL',
+      cls: op === 'add_credits' ? 'btn-ok' : 'btn-danger',
+      onClick: async (card) => {
+        const amount = Math.max(1, parseInt(card.querySelector('#mBulkAmount').value, 10) || 0);
+        const usernames = [...S.selected];
+        closeModal();
+        try {
+          const data = await api('bulk_reseller', { op, usernames, amount });
+          toast(data.success ? `${data.affected} account(s) updated` : data.message);
+          if (data.success) loadResellers();
+        } catch (err) { toast(err.message); }
+      },
+    }],
+  });
+}
+
+async function createReseller() {
+  const username = document.getElementById('newSlug').value.trim().toLowerCase();
+  const password = document.getElementById('newPass').value;
+  const name = document.getElementById('newName').value.trim();
+  const credits = parseInt(document.getElementById('newCredits').value, 10) || 0;
+  if (!username) return showNote('createNote', 'Enter a username.', 'err');
+  if (password.length < 8) return showNote('createNote', 'Password must be at least 8 characters.', 'err');
+  try {
+    const data = await api('create_reseller', { username, password, name, credits });
+    showNote('createNote', data.message, data.success ? 'ok' : 'err');
+    if (data.success) {
+      document.getElementById('newSlug').value = '';
+      document.getElementById('newPass').value = '';
+      document.getElementById('newName').value = '';
+      document.getElementById('newCredits').value = '10';
+      loadResellers();
+    }
+  } catch (err) { showNote('createNote', err.message, 'err'); }
+}
+
+/* ── mod locks ── */
+async function loadLocks() {
+  try {
+    const data = await api('get_mod_locks');
+    if (!data.success) return;
+    const mods = data.mods || {};
+    const locked = data.locked_mods || [];
+    const ids = Object.keys(mods).length ? Object.keys(mods) : locked;
+    document.getElementById('locksList').innerHTML = ids.length ? ids.map((id) => {
+      const isLocked = locked.includes(id);
+      return `<div class="lock-row">
+        <div class="lock-name">${esc(mods[id]?.label || id)}<div class="key-meta">${esc(id)}${mods[id]?.zip_url ? ' · zip attached' : ''}</div></div>
+        <span class="tag ${isLocked ? 't-red' : 't-green'}">${isLocked ? 'LOCKED' : 'OPEN'}</span>
+        <button class="btn ${isLocked ? 'btn-ok' : 'btn-danger'} btn-sm" onclick="setModLock('${esc(id)}',${!isLocked})">${isLocked ? 'UNLOCK' : 'LOCK'}</button>
+      </div>`;
+    }).join('') : '<div class="empty">No mods configured in version.json</div>';
+  } catch (err) { toast(err.message); }
+}
+
+async function setModLock(id, locked) {
+  try {
+    const data = await api('set_mod_lock', { mod_key: id, locked });
+    toast(data.success ? `Mod ${locked ? 'locked' : 'unlocked'}` : data.message);
+    if (data.success) loadLocks();
+  } catch (err) { toast(err.message); }
+}
+
+/* ── features ── */
+async function loadFeatures() {
+  try {
+    const data = await api('get_mod_features');
+    if (!data.success) return;
+    const mods = data.mods || {};
+    const features = data.mod_features || {};
+    const ids = Object.keys(mods).length ? Object.keys(mods) : Object.keys(features);
+    document.getElementById('featureFields').innerHTML = ids.length ? ids.map((id) => `<span class="lbl">${esc((mods[id]?.label || id).toUpperCase())}</span><textarea class="inp" id="feat-${esc(id)}" rows="6">${esc(features[id] || '')}</textarea>`).join('') : '<div class="empty">No mods configured</div>';
+  } catch (err) { toast(err.message); }
+}
+
+async function saveFeatures() {
+  const fields = document.querySelectorAll('[id^="feat-"]');
+  const modFeatures = {};
+  fields.forEach((field) => { modFeatures[field.id.slice(5)] = field.value; });
+  try {
+    const data = await api('set_mod_features', { mod_features: modFeatures });
+    showNote('featuresNote', data.success ? '✓ Features saved' : data.message, data.success ? 'ok' : 'err');
+  } catch (err) { showNote('featuresNote', err.message, 'err'); }
+}
+
+/* ── activity ── */
+async function loadActivity() {
+  try {
+    const data = await api('get_activity', { limit: 150 });
+    if (!data.success) return;
+    S.activity = data.entries || [];
+    document.getElementById('activityCount').textContent = `${data.total || 0} events`;
+    document.getElementById('activityList').innerHTML = S.activity.length ? S.activity.map((entry) => `<div class="act-row"><span class="act-time">${fmtDate(new Date(entry.ts))}</span><span class="act-actor">${esc(entry.actor)}</span><span class="act-action">${esc(entry.action)}</span><span class="act-detail">${esc(entry.detail)}</span></div>`).join('') : '<div class="empty">NO ACTIVITY YET</div>';
+  } catch (err) { toast(err.message); }
+}
+
+/* ── maintenance ── */
+async function toggleMaintenance(isOnline) {
+  const maintenance = !isOnline;
+  try {
+    const data = await api('set_maintenance', { maintenance });
+    if (!data.success) return toast(data.message || 'Failed');
+    setMaintenanceUI(maintenance);
+    toast(maintenance ? 'Maintenance ON' : 'App is live');
+  } catch (err) { toast(err.message); }
+}
+
+function setMaintenanceUI(on) {
+  const tag = document.getElementById('maintTag');
+  if (tag) {
+    tag.textContent = on ? 'MAINTENANCE ON' : 'MAINTENANCE OFF';
+    tag.className = 'tag ' + (on ? 't-red' : 't-green');
+  }
+  const liveDot = document.getElementById('liveDot');
+  const liveText = document.getElementById('liveText');
+  if (liveDot) liveDot.classList.toggle('off', on);
+  if (liveText) liveText.textContent = on ? 'OFFLINE' : 'ONLINE';
+  ['maintSwitch', 'maintSwitch2'].forEach((id) => { const el = document.getElementById(id); if (el) el.checked = !on; });
+}
+
+/* ── ui helpers ── */
+const overlay = document.getElementById('overlay');
+
+function openModal({ title, sub, body, actions }) {
+  const card = document.getElementById('modalCard');
+  card.innerHTML = `<div class="modal-title">${esc(title)}</div>${sub ? `<div class="modal-sub">${esc(sub)}</div>` : ''}<div>${body}</div><div class="modal-acts" id="modalActs"></div>`;
+  const acts = card.querySelector('#modalActs');
+  (actions || []).forEach((action) => {
+    const button = document.createElement('button');
+    button.className = 'btn ' + (action.cls || 'btn-ghost');
+    button.textContent = action.label;
+    button.addEventListener('click', () => action.onClick(card));
+    acts.appendChild(button);
+  });
+  overlay.classList.add('show');
+}
+
+function closeModal() { overlay.classList.remove('show'); }
+
+function askConfirm(title, sub, label) {
+  return new Promise((resolve) => {
+    openModal({
+      title,
+      sub,
+      body: '<p class="small muted">This action cannot be undone.</p>',
+      actions: [
+        { label: 'CANCEL', cls: 'btn-ghost', onClick: () => { closeModal(); resolve(false); } },
+        { label: label || 'CONFIRM', cls: 'btn-danger', onClick: () => { closeModal(); resolve(true); } },
+      ],
+    });
+  });
+}
+
+function showNote(id, message, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = message;
+  el.className = 'note show ' + type;
+}
+
+let toastTimer;
+function toast(message) {
+  const el = document.getElementById('toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function copyText(text) {
+  const fallback = () => {
+    const area = document.createElement('textarea');
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand('copy'); toast('Copied'); } catch { toast('Copy failed'); }
+    document.body.removeChild(area);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('Copied')).catch(fallback);
+  else fallback();
+}
+
+function fmtDate(date) {
+  if (!date || Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function timeLeft(ms) {
+  if (ms <= 0) return 'expired';
+  const seconds = Math.floor(ms / 1000);
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (days) return `${days}d ${hours}h left`;
+  if (hours) return `${hours}h ${minutes}m left`;
+  return `${minutes}m left`;
+}
+
+function esc(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') closeModal();
+});
+
+boot();
+</script>
+</body>
+</html>

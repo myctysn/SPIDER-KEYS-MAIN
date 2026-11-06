@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SPIDER-MODS — Reseller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060a;--s1:#0c0c12;--s2:#12121b;--s3:#191924;
+  --line:#1f1f2c;--line2:#2c2c40;
+  --red:#ff2b3d;--red-dim:rgba(255,43,61,.1);
+  --green:#22e07a;--amber:#ffb020;--blue:#5b8cff;--violet:#a855f7;
+  --text:#f4f4fa;--muted:#8d8da8;--dim:#4c4c66;
+  --mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding-bottom:48px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle at 50% -12%,rgba(255,43,61,.15),transparent 55%),
+    repeating-conic-gradient(from 0deg at 50% -10%,rgba(255,255,255,.04) 0deg .18deg,transparent .18deg 14deg),
+    repeating-radial-gradient(circle at 50% -10%,transparent 0 58px,rgba(255,255,255,.028) 58px 59px);
+  opacity:.75}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 50% 0%,transparent 30%,var(--bg) 78%)}
+.mono{font-family:var(--mono)}
+.hidden{display:none!important}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;z-index:1}
+.login-card{width:100%;max-width:370px;background:rgba(12,12,18,.92);border:1px solid var(--line2);border-radius:20px;
+  padding:32px 26px;text-align:center;backdrop-filter:blur(12px);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.logo-ring{width:70px;height:70px;margin:0 auto 16px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--red);background:radial-gradient(circle,rgba(255,43,61,.18),rgba(255,43,61,.02));
+  border:1px solid rgba(255,43,61,.3);box-shadow:0 0 32px rgba(255,43,61,.22)}
+.logo-ring svg{width:40px;height:40px}
+.brand-name{font-size:24px;font-weight:700;letter-spacing:3px;line-height:1}
+.brand-name span{color:var(--red)}
+.brand-sub{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--dim);margin-top:8px}
+.slug-pill{margin:20px 0 4px;padding:8px 12px;border-radius:9px;background:rgba(91,140,255,.08);
+  border:1px solid rgba(91,140,255,.22);color:#9db8ff;font-family:var(--mono);font-size:11px;letter-spacing:1px}
+.login-note{font-size:10px;color:var(--dim);margin-top:16px;line-height:1.6}
+.topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 16px;background:rgba(8,8,13,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:var(--red);background:var(--red-dim);border:1px solid rgba(255,43,61,.28)}
+.mark svg{width:21px;height:21px}
+.brand-name-sm{font-size:14px;font-weight:700;letter-spacing:2px;line-height:1.1}
+.brand-name-sm span{color:var(--red)}
+.brand-sub-sm{font-family:var(--mono);font-size:8px;letter-spacing:2.5px;color:var(--dim);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.top-right{display:flex;align-items:center;gap:8px}
+.credit-pill{padding:7px 11px;border-radius:9px;background:rgba(34,224,122,.08);border:1px solid rgba(34,224,122,.25);
+  font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green);white-space:nowrap}
+.tabs{position:sticky;top:59px;z-index:55;display:flex;gap:4px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;
+  background:rgba(8,8,13,.82);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 15px;border-radius:9px;border:1px solid transparent;background:none;color:var(--muted);
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.2px;cursor:pointer;transition:.18s}
+.tab.active{color:#fff;background:var(--red-dim);border-color:rgba(255,43,61,.35)}
+main{padding:16px;max-width:760px;margin:0 auto;position:relative;z-index:1}
+section{display:none;animation:fade .25s ease}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:linear-gradient(180deg,var(--s1),rgba(12,12,18,.96));border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:13px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--dim)}
+.h2{font-size:17px;font-weight:700;margin-top:4px}
+.lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin:14px 0 6px}
+.lbl:first-of-type{margin-top:0}
+.inp,select{width:100%;background:var(--s2);border:1px solid var(--line2);border-radius:10px;color:var(--text);
+  font-family:var(--mono);font-size:13px;padding:11px 12px;outline:none;transition:.18s}
+.inp:focus,select:focus{border-color:rgba(255,43,61,.45);box-shadow:0 0 0 3px rgba(255,43,61,.08)}
+.inp::placeholder{color:var(--dim)}
+select option{background:var(--s2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:10px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:11px 16px;transition:.16s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 8px 24px rgba(255,43,61,.25)}
+.btn-ghost{background:var(--s2);color:var(--muted);border:1px solid var(--line2)}
+.btn-danger{background:rgba(255,43,61,.1);color:var(--red);border:1px solid rgba(255,43,61,.3)}
+.btn-full{width:100%;margin-top:16px;padding:13px}
+.btn-sm{padding:7px 11px;font-size:9px;border-radius:8px}
+.credits-hero{text-align:center;padding:22px;border-radius:16px;background:rgba(34,224,122,.05);
+  border:1px solid rgba(34,224,122,.18);margin-bottom:13px}
+.credits-num{font-size:46px;font-weight:700;line-height:1;color:var(--green);letter-spacing:-1px}
+.credits-lbl{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--dim);margin-top:7px}
+.credits-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:5px}
+.key-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--s2);margin-bottom:7px}
+.key-row.dead{opacity:.55}
+.key-body{flex:1;min-width:0}
+.key-code{font-family:var(--mono);font-size:12px;font-weight:700;word-break:break-all;cursor:pointer}
+.key-code:hover{color:var(--red)}
+.key-meta{font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px;line-height:1.6}
+.tag{display:inline-flex;padding:3px 9px;border-radius:20px;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.t-green{background:rgba(34,224,122,.1);color:var(--green);border:1px solid rgba(34,224,122,.22)}
+.t-red{background:rgba(255,43,61,.1);color:var(--red);border:1px solid rgba(255,43,61,.24)}
+.t-grey{background:var(--s3);color:var(--muted);border:1px solid var(--line2)}
+.t-blue{background:rgba(91,140,255,.1);color:var(--blue);border:1px solid rgba(91,140,255,.24)}
+.empty{padding:30px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:1px}
+.loading{padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.note{padding:11px 13px;border-radius:10px;font-family:var(--mono);font-size:11px;line-height:1.6;display:none;margin-top:12px;white-space:pre-line}
+.note.show{display:block}
+.note.ok{background:rgba(34,224,122,.07);border:1px solid rgba(34,224,122,.22);color:var(--green)}
+.note.err{background:rgba(255,43,61,.07);border:1px solid rgba(255,43,61,.22);color:var(--red)}
+.result{margin-top:14px;padding:16px;border-radius:12px;background:rgba(255,43,61,.06);border:1px solid rgba(255,43,61,.22);text-align:center}
+.result-key{font-family:var(--mono);font-size:14px;font-weight:700;word-break:break-all;color:#fff;cursor:pointer}
+.result-meta{font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:7px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.bar{height:7px;border-radius:6px;background:var(--s3);overflow:hidden;margin-top:7px}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff6b3d);border-radius:6px}
+.overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,2,5,.8);backdrop-filter:blur(6px)}
+.overlay.show{display:flex}
+.modal{width:100%;max-width:360px;background:var(--s1);border:1px solid var(--line2);border-radius:18px;padding:22px}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:14px;word-break:break-all}
+.modal-acts{display:flex;gap:8px;margin-top:16px}
+.modal-acts .btn{flex:1}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,14px);z-index:300;background:var(--s3);border:1px solid var(--line2);
+  border-left:3px solid var(--red);color:var(--text);font-family:var(--mono);font-size:11px;padding:11px 16px;border-radius:10px;
+  opacity:0;pointer-events:none;transition:.22s;max-width:90vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){.grid2,.grid3{grid-template-columns:1fr}main{padding:12px}}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login">
+  <form class="login-card" onsubmit="doLogin(event)">
+    <div class="logo-ring">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="12" cy="8.6" r="2.2" fill="currentColor" stroke="none"/>
+        <ellipse cx="12" cy="15.1" rx="3" ry="4.1" fill="currentColor" stroke="none"/>
+        <path d="M9.8 7.2 5.6 4M9.1 9.4 4 8M9.3 11.9 4.1 13.3M9.7 14.3 5.7 17.5M14.2 7.2 18.4 4M14.9 9.4 20 8M14.7 11.9 19.9 13.3M14.3 14.3 18.3 17.5"/>
+      </svg>
+    </div>
+    <div class="brand-name">SPIDER<span>-MODS</span></div>
+    <div class="brand-sub">RESELLER ACCESS</div>
+    <div class="slug-pill" id="slugPill">—</div>
+    <div style="text-align:left">
+      <span class="lbl">PASSWORD</span>
+      <input class="inp" id="passInput" type="password" placeholder="Enter password" autocomplete="current-password"/>
+      <button class="btn btn-red btn-full" type="submit" id="loginBtn">LOGIN →</button>
+      <div class="note" id="loginNote"></div>
+    </div>
+    <div class="login-note">Sessions are signed and expire after 24 hours.<br/>Contact admin if you lost access.</div>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="12" cy="8.6" r="2.2" fill="currentColor" stroke="none"/>
+          <ellipse cx="12" cy="15.1" rx="3" ry="4.1" fill="currentColor" stroke="none"/>
+          <path d="M9.8 7.2 5.6 4M9.1 9.4 4 8M9.3 11.9 4.1 13.3M9.7 14.3 5.7 17.5M14.2 7.2 18.4 4M14.9 9.4 20 8M14.7 11.9 19.9 13.3M14.3 14.3 18.3 17.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name-sm">SPIDER<span>-MODS</span></div>
+        <div class="brand-sub-sm" id="resellerName">—</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="credit-pill" id="creditPill">0 CR</div>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">EXIT</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="generate">GENERATE</button>
+    <button class="tab" data-tab="keys">MY KEYS</button>
+    <button class="tab" data-tab="account">ACCOUNT</button>
+  </nav>
+
+  <main>
+    <section id="tab-generate" class="active">
+      <div class="credits-hero">
+        <div class="credits-num" id="creditsBig">—</div>
+        <div class="credits-lbl">CREDITS REMAINING</div>
+        <div class="credits-sub">1 credit = 1 key</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">KEY FACTORY</div><div class="h2">Create a SPIDER key</div></div></div>
+        <span class="lbl">KEY TYPE</span>
+        <select class="inp" id="genType">
+          <option value="normal" id="optNormal">SPIDER-N · Normal Key</option>
+          <option value="mod_menu" id="optMod">SPIDER-MM · Mod Menu Key</option>
+          <option value="vortex" id="optVortex">SPIDER-VX · Vortex Key</option>
+        </select>
+        <span class="lbl">DURATION</span>
+        <div class="grid3">
+          <input class="inp" id="genDur" type="number" value="7" min="1"/>
+          <select class="inp" id="genUnit">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days" selected>Days</option>
+            <option value="months">Months</option>
+            <option value="lifetime">Lifetime</option>
+          </select>
+        </div>
+        <span class="lbl">LABEL (OPTIONAL)</span>
+        <input class="inp" id="genLabel" placeholder="e.g. Customer name"/>
+        <button class="btn btn-red btn-full" id="genBtn" onclick="generateKey()">⚡ GENERATE KEY</button>
+        <div class="note" id="genNote"></div>
+        <div class="result hidden" id="genResult">
+          <div class="result-key" id="genKey" onclick="copyText(this.textContent)"></div>
+          <div class="result-meta" id="genMeta"></div>
+          <div class="result-meta">tap the key to copy</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-keys">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="eyebrow">YOUR INVENTORY</div><div class="h2" id="myKeyCount">My keys</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadMyKeys()">REFRESH</button>
+        </div>
+        <input class="inp" id="keySearch" placeholder="Search your keys..." oninput="renderMyKeys()" style="margin-bottom:12px"/>
+        <div id="myKeysList" class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <section id="tab-account">
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">USAGE</div><div class="h2">This month</div></div></div>
+        <div id="usageBox" class="loading">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="eyebrow">SECURITY</div><div class="h2">Change password</div></div></div>
+        <span class="lbl">CURRENT PASSWORD</span>
+        <input class="inp" id="curPass" type="password" placeholder="Current password"/>
+        <span class="lbl">NEW PASSWORD (8+ CHARS)</span>
+        <input class="inp" id="newPass" type="password" placeholder="New password"/>
+        <button class="btn btn-red btn-full" onclick="changePassword()">UPDATE PASSWORD</button>
+        <div class="note" id="passNote"></div>
+      </div>
+      <div class="card">
+        <div class="row"><span class="mono" style="font-size:10px;color:var(--muted)">ACCOUNT</span><span class="mono" style="font-size:11px" id="accSlug">—</span></div>
+        <div class="row"><span class="mono" style="font-size:10px;color:var(--muted)">SIGNED IN SINCE</span><span class="mono" style="font-size:11px" id="accLogin">—</span></div>
+        <div class="row"><span class="mono" style="font-size:10px;color:var(--muted)">TOTAL KEYS MADE</span><span class="mono" style="font-size:11px" id="accTotal">0</span></div>
+        <button class="btn btn-danger btn-full" onclick="logout()">END SESSION</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modalCard"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const API = location.protocol === 'file:' ? 'https://loader-keys.vercel.app/api' : location.origin + '/api';
+const params = new URLSearchParams(location.search);
+const parts = location.pathname.split('/').filter(Boolean);
+const SLUG = String(params.get('slug') || parts[0] || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const TOKEN_KEY = 'spider_reseller_' + SLUG;
+let TOKEN = sessionStorage.getItem(TOKEN_KEY) || '';
+const S = { me: null, myKeys: {} };
+
+async function api(action, body) {
+  const headers = {};
+  if (body) headers['Content-Type'] = 'application/json';
+  if (TOKEN) headers.Authorization = 'Bearer ' + TOKEN;
+  let response;
+  try {
+    response = await fetch(API + '?action=' + encodeURIComponent(action), {
+      method: body ? 'POST' : 'GET',
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch { throw new Error('Network error. Check your connection.'); }
+  let data;
+  try { data = await response.json(); } catch { throw new Error('Invalid server response.'); }
+  if (response.status === 401 && action !== 'reseller_login') {
+    logout(true);
+    throw new Error(data.message || 'Session expired.');
+  }
+  return data;
+}
+
+async function doLogin(event) {
+  event.preventDefault();
+  const input = document.getElementById('passInput');
+  const btn = document.getElementById('loginBtn');
+  const password = input.value;
+  if (!password) return showNote('loginNote', 'Enter your password.', 'err');
+  btn.disabled = true;
+  btn.textContent = 'CHECKING...';
+  try {
+    const data = await api('reseller_login', { username: SLUG, password });
+    if (!data.success) return showNote('loginNote', data.message || 'Login failed.', 'err');
+    TOKEN = data.token;
+    sessionStorage.setItem(TOKEN_KEY, TOKEN);
+    input.value = '';
+    enter(data.reseller);
+  } catch (err) {
+    showNote('loginNote', err.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'LOGIN →';
+  }
+}
+
+function enter(profile) {
+  S.me = profile;
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('resellerName').textContent = 'RESELLER · ' + String(profile.name || SLUG).toUpperCase();
+  document.getElementById('accSlug').textContent = SLUG;
+  document.title = 'SPIDER-MODS — ' + SLUG;
+  applyProfile(profile);
+  loadMyKeys(true);
+}
+
+function applyProfile(profile) {
+  S.me = profile;
+  const credits = Number(profile.credits) || 0;
+  document.getElementById('creditPill').textContent = credits + ' CR';
+  document.getElementById('creditsBig').textContent = credits;
+  document.getElementById('accTotal').textContent = profile.total_keys_generated || 0;
+  document.getElementById('accLogin').textContent = profile.last_login ? fmtDate(new Date(profile.last_login)) : 'just now';
+  const options = { normal: 'optNormal', mod_menu: 'optMod', vortex: 'optVortex' };
+  const allowed = { normal: profile.allow_normal, mod_menu: profile.allow_mod_menu, vortex: profile.allow_vortex };
+  const select = document.getElementById('genType');
+  Object.entries(options).forEach(([type, id]) => {
+    const option = document.getElementById(id);
+    option.disabled = !allowed[type];
+    option.hidden = !allowed[type];
+  });
+  if (!allowed[select.value]) {
+    const first = Object.keys(allowed).find((type) => allowed[type]);
+    if (first) select.value = first;
+  }
+  const anyAllowed = Object.values(allowed).some(Boolean);
+  const button = document.getElementById('genBtn');
+  button.disabled = !anyAllowed || credits <= 0;
+  button.textContent = !anyAllowed ? 'NO KEY TYPES ENABLED' : credits <= 0 ? 'NO CREDITS LEFT' : '⚡ GENERATE KEY';
+  renderUsage();
+}
+
+async function boot() {
+  document.getElementById('slugPill').textContent = SLUG ? '👤 ' + SLUG.toUpperCase() : 'INVALID RESELLER LINK';
+  if (!SLUG) {
+    showNote('loginNote', 'Open your personal reseller link, e.g. /yourname', 'err');
+    document.getElementById('loginBtn').disabled = true;
+    return;
+  }
+  if (!TOKEN) return;
+  try {
+    const data = await api('reseller_session');
+    if (data.success) enter(data.reseller);
+    else logout();
+  } catch { logout(); }
+}
+
+function logout(expired) {
+  TOKEN = '';
+  sessionStorage.removeItem(TOKEN_KEY);
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('loginView').classList.remove('hidden');
+  if (expired) showNote('loginNote', 'Session expired. Log in again.', 'err');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
+  document.querySelectorAll('section').forEach((section) => section.classList.toggle('active', section.id === 'tab-' + name));
+  if (name === 'keys') loadMyKeys();
+  if (name === 'account') { loadMyKeys(true); renderUsage(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
+
+function calcExpiry(value, unit) {
+  if (unit === 'lifetime') return null;
+  const date = new Date();
+  if (unit === 'minutes') date.setMinutes(date.getMinutes() + value);
+  if (unit === 'hours') date.setHours(date.getHours() + value);
+  if (unit === 'days') date.setDate(date.getDate() + value);
+  if (unit === 'months') date.setMonth(date.getMonth() + value);
+  return date.toISOString();
+}
+
+async function generateKey() {
+  const button = document.getElementById('genBtn');
+  const value = parseInt(document.getElementById('genDur').value, 10) || 7;
+  const unit = document.getElementById('genUnit').value;
+  const type = document.getElementById('genType').value;
+  const label = document.getElementById('genLabel').value.trim();
+  button.disabled = true;
+  button.textContent = 'GENERATING...';
+  try {
+    const data = await api('reseller_generate_key', {
+      key_type: type,
+      label,
+      expires_at: calcExpiry(value, unit),
+    });
+    if (!data.success) return showNote('genNote', data.message || 'Failed.', 'err');
+    document.getElementById('genNote').classList.remove('show');
+    document.getElementById('genResult').classList.remove('hidden');
+    document.getElementById('genKey').textContent = data.key;
+    document.getElementById('genMeta').textContent = `${data.expires_at ? 'Expires ' + fmtDate(new Date(data.expires_at)) : 'Lifetime'} · ${data.credits_left} credits left`;
+    document.getElementById('genLabel').value = '';
+    applyProfile({ ...S.me, credits: data.credits_left, total_keys_generated: (S.me.total_keys_generated || 0) + 1, month_count: (S.me.month_count || 0) + 1 });
+    toast('Key generated');
+    if (document.getElementById('tab-keys').classList.contains('active')) loadMyKeys();
+  } catch (err) {
+    showNote('genNote', err.message, 'err');
+  } finally {
+    const credits = Number(S.me?.credits) || 0;
+    const enabled = Boolean(S.me && (S.me.allow_normal || S.me.allow_mod_menu || S.me.allow_vortex));
+    button.disabled = credits <= 0 || !enabled;
+    button.textContent = !enabled ? 'NO KEY TYPES ENABLED' : credits <= 0 ? 'NO CREDITS LEFT' : '⚡ GENERATE KEY';
+  }
+}
+
+async function loadMyKeys(silent) {
+  if (!silent) document.getElementById('myKeysList').innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const data = await api('reseller_get_keys');
+    if (!data.success) return;
+    S.myKeys = data.keys || {};
+    if (data.reseller) applyProfile(data.reseller);
+    renderMyKeys();
+    renderUsage();
+  } catch (err) { if (!silent) toast(err.message); }
+}
+
+function renderMyKeys() {
+  const query = (document.getElementById('keySearch')?.value || '').trim().toLowerCase();
+  const now = Date.now();
+  let entries = Object.entries(S.myKeys);
+  if (query) entries = entries.filter(([key, record]) => `${key} ${record.label || ''}`.toLowerCase().includes(query));
+  entries.sort((a, b) => new Date(b[1].created_at || 0) - new Date(a[1].created_at || 0));
+  document.getElementById('myKeyCount').textContent = `${entries.length} key${entries.length === 1 ? '' : 's'}`;
+  const list = document.getElementById('myKeysList');
+  if (!entries.length) { list.innerHTML = '<div class="empty">NO KEYS YET</div>'; return; }
+  list.innerHTML = entries.map(([key, record]) => {
+    const expires = record.expires_at && record.expires_at !== 'null' ? new Date(record.expires_at) : null;
+    const live = !expires || expires.getTime() > now;
+    const devices = Array.isArray(record.connected_devices) ? record.connected_devices : (record.device_id ? [record.device_id] : []);
+    return `<div class="key-row ${live ? '' : 'dead'}">
+      <div class="key-body">
+        <div class="key-code" onclick="copyText('${esc(key)}')">${esc(key)}</div>
+        <div class="key-meta">${esc(record.label || '—')} · ${expires ? 'expires ' + fmtDate(expires) : 'lifetime'} · ${devices.length}/${record.max_devices || 1} devices</div>
+      </div>
+      <span class="tag ${live ? 't-green' : 't-red'}">${live ? 'VALID' : 'EXPIRED'}</span>
+      <button class="btn btn-danger btn-sm" onclick="deleteKey('${esc(key)}')">DEL</button>
+    </div>`;
+  }).join('');
+}
+
+function renderUsage() {
+  const box = document.getElementById('usageBox');
+  if (!box || !S.me) return;
+  const me = S.me;
+  const counts = { normal: 0, mod_menu: 0, vortex: 0 };
+  Object.values(S.myKeys).forEach((record) => { const type = record.key_type || 'normal'; counts[type] = (counts[type] || 0) + 1; });
+  const monthly = me.monthly_limit ? `<div class="row"><span class="mono small" style="color:var(--muted)">KEYS THIS MONTH</span><span class="mono" style="font-size:12px">${me.month_count} / ${me.monthly_limit}</span></div><div class="bar"><span style="width:${Math.min(100, (me.month_count / me.monthly_limit) * 100)}%"></span></div>` : `<div class="row"><span class="mono small" style="color:var(--muted)">KEYS THIS MONTH</span><span class="mono" style="font-size:12px">${me.month_count} (no limit)</span></div>`;
+  const rows = ['normal', 'mod_menu', 'vortex'].map((type) => {
+    const limit = me.limits?.[type] || 0;
+    const allowed = type === 'normal' ? me.allow_normal : type === 'mod_menu' ? me.allow_mod_menu : me.allow_vortex;
+    return `<div class="row"><span class="mono small" style="color:var(--muted)">${type.toUpperCase().replace('_', ' ')} KEYS</span><span class="mono" style="font-size:12px">${allowed ? `${counts[type] || 0}${limit ? ' / ' + limit : ''}` : 'DISABLED'}</span></div>`;
+  }).join('');
+  box.innerHTML = monthly + rows + `<div class="row"><span class="mono small" style="color:var(--muted)">CREDIT CAP</span><span class="mono" style="font-size:12px">${me.max_credits || 'unlimited'}</span></div>`;
+}
+
+async function deleteKey(key) {
+  if (!(await askConfirm('Delete this key?', key, 'DELETE'))) return;
+  try {
+    const data = await api('reseller_delete_key', { key });
+    toast(data.success ? 'Key deleted' : data.message);
+    if (data.success) loadMyKeys();
+  } catch (err) { toast(err.message); }
+}
+
+async function changePassword() {
+  const current = document.getElementById('curPass').value;
+  const next = document.getElementById('newPass').value;
+  if (!current) return showNote('passNote', 'Enter your current password.', 'err');
+  if (next.length < 8) return showNote('passNote', 'New password must be at least 8 characters.', 'err');
+  try {
+    const data = await api('reseller_change_password', { current_password: current, new_password: next });
+    showNote('passNote', data.success ? '✓ Password updated. Other devices were signed out.' : data.message, data.success ? 'ok' : 'err');
+    if (data.success) {
+      TOKEN = data.token;
+      sessionStorage.setItem(TOKEN_KEY, TOKEN);
+      document.getElementById('curPass').value = '';
+      document.getElementById('newPass').value = '';
+      applyProfile(data.reseller);
+    }
+  } catch (err) { showNote('passNote', err.message, 'err'); }
+}
+
+const overlay = document.getElementById('overlay');
+function openModal({ title, sub, body, actions }) {
+  const card = document.getElementById('modalCard');
+  card.innerHTML = `<div class="modal-title">${esc(title)}</div>${sub ? `<div class="modal-sub">${esc(sub)}</div>` : ''}<div>${body}</div><div class="modal-acts" id="modalActs"></div>`;
+  const acts = card.querySelector('#modalActs');
+  (actions || []).forEach((action) => {
+    const button = document.createElement('button');
+    button.className = 'btn ' + (action.cls || 'btn-ghost');
+    button.textContent = action.label;
+    button.addEventListener('click', () => action.onClick(card));
+    acts.appendChild(button);
+  });
+  overlay.classList.add('show');
+}
+function closeModal() { overlay.classList.remove('show'); }
+function askConfirm(title, sub, label) {
+  return new Promise((resolve) => {
+    openModal({
+      title, sub, body: '<p class="mono" style="font-size:10px;color:var(--muted)">This cannot be undone.</p>',
+      actions: [
+        { label: 'CANCEL', cls: 'btn-ghost', onClick: () => { closeModal(); resolve(false); } },
+        { label: label || 'CONFIRM', cls: 'btn-danger', onClick: () => { closeModal(); resolve(true); } },
+      ],
+    });
+  });
+}
+function showNote(id, message, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = message;
+  el.className = 'note show ' + type;
+}
+let toastTimer;
+function toast(message) {
+  const el = document.getElementById('toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+function copyText(text) {
+  const fallback = () => {
+    const area = document.createElement('textarea');
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand('copy'); toast('Copied'); } catch { toast('Copy failed'); }
+    document.body.removeChild(area);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('Copied')).catch(fallback);
+  else fallback();
+}
+function fmtDate(date) {
+  if (!date || Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+function esc(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+}
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
+boot();
+</script>
+</body>
+</html>
