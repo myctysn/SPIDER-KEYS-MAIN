@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-06T14:06:55.823Z",
+      "actor": "admin",
+      "action": "reseller created",
+      "detail": "test"
+    },
+    {
       "ts": "2026-11-06T14:05:40.639Z",
       "actor": "admin",
       "action": "login",
