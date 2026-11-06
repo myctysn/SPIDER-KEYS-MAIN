@@ -4,8 +4,8 @@ const { Octokit } = require('@octokit/rest');
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-const OWNER = 'solankiyashrajsinh922-cyber';
-const REPO = 'loader-keys';
+const OWNER = 'myctysn';
+const REPO = 'SPIDER-KEYS-MAIN';
 
 const FILES = {
   keys: 'keys.json',
