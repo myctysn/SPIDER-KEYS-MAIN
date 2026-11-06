@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-06T10:11:41.822Z",
+      "actor": "admin",
+      "action": "key deleted",
+      "detail": "SPIDER-MM-5NGM3-3NGHH"
+    },
+    {
       "ts": "2026-11-06T10:11:34.389Z",
       "actor": "admin",
       "action": "login",
