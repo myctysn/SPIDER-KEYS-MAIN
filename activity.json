@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-06T09:51:13.596Z",
+      "actor": "admin",
+      "action": "key deleted",
+      "detail": "SPIDER-N-KQZB2-RT27Q"
+    },
+    {
       "ts": "2026-11-06T09:50:54.827Z",
       "actor": "admin",
       "action": "login",
