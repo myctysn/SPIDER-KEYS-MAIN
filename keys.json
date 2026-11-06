@@ -20,13 +20,14 @@
     "created_at": "2026-11-06T13:05:09.079Z",
     "expires_at": "2026-11-07T13:05:08.061Z",
     "duration": "",
-    "device_id": "H4X-D4E2B2DBD449",
-    "locked_at": "2026-11-06T13:12:40.886Z",
+    "device_id": "H4X-A0D867EFA073",
+    "locked_at": "2026-11-06T13:19:54.920Z",
     "active": true,
     "reseller": null,
     "max_devices": 100,
     "connected_devices": [
-      "H4X-D4E2B2DBD449"
+      "H4X-D4E2B2DBD449",
+      "H4X-A0D867EFA073"
     ],
     "key_type": "mod_menu",
     "created_by": "admin"
