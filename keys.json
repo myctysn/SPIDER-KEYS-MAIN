@@ -20,8 +20,8 @@
     "created_at": "2026-11-06T13:05:09.079Z",
     "expires_at": "2026-11-07T13:05:08.061Z",
     "duration": "",
-    "device_id": "H4X-E659891AE6F2",
-    "locked_at": "2026-11-06T13:49:24.847Z",
+    "device_id": "H4X-9DE025839D4B",
+    "locked_at": "2026-11-06T14:03:54.745Z",
     "active": true,
     "reseller": null,
     "max_devices": 100,
@@ -32,7 +32,8 @@
       "H4X-12DFC23C1274",
       "H4X-6FC11E586F6A",
       "H4X-565C026456F7",
-      "H4X-E659891AE6F2"
+      "H4X-E659891AE6F2",
+      "H4X-9DE025839D4B"
     ],
     "key_type": "mod_menu",
     "created_by": "admin"
