@@ -1,1 +1,23 @@
-{}
+{
+  "test": {
+    "name": "test",
+    "password_hash": "scrypt$f3775bb3e9ad730e697eafd34f015799$c6c6bc801c1b1bf24a8e562b74075d026f8d1b63da4190c31f4590811ec5210fbf94f6574cef9517c37d1e709d3d3e8638a814268474cd4a42d83b44af70f8ac",
+    "credits": 10,
+    "max_credits": 0,
+    "monthly_limit": 0,
+    "month": "2026-11",
+    "month_count": 0,
+    "limits": {
+      "normal": 0,
+      "mod_menu": 0,
+      "vortex": 0
+    },
+    "created_at": "2026-11-06T14:06:54.568Z",
+    "total_keys_generated": 0,
+    "active": true,
+    "allow_normal": true,
+    "allow_mod_menu": false,
+    "allow_vortex": false,
+    "session_version": 1
+  }
+}
