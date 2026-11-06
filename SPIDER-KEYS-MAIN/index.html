@@ -307,7 +307,10 @@ select option{background:var(--s2)}
       <div class="card">
         <div class="card-head">
           <div><div class="eyebrow">KEY INVENTORY</div><div class="h2" style="margin-top:4px" id="keyCount">0 keys</div></div>
-          <button class="btn btn-ghost btn-sm" onclick="loadKeys()">REFRESH</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-danger btn-sm" onclick="deleteExpiredKeys()">DELETE EXPIRED</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadKeys()">REFRESH</button>
+          </div>
         </div>
         <div class="toolbar">
           <input class="inp" id="keySearch" placeholder="Search key, label or reseller..." oninput="renderKeys()"/>
@@ -696,6 +699,22 @@ async function deleteKey(key) {
   try {
     const data = await api('delete_key', { key });
     toast(data.success ? 'Key deleted' : data.message);
+    if (data.success) { loadKeys(); loadDashboard(); }
+  } catch (err) { toast(err.message); }
+}
+
+async function deleteExpiredKeys() {
+  const now = Date.now();
+  const expired = Object.entries(S.keys).filter(([, record]) => {
+    if (!record || !record.expires_at || record.expires_at === 'null') return false;
+    const time = new Date(record.expires_at).getTime();
+    return Number.isFinite(time) && time < now;
+  }).length;
+  if (!expired) return toast('No expired keys to delete');
+  if (!(await askConfirm('Delete all expired keys?', `${expired} expired key(s) will be removed from keys.json.`, 'DELETE'))) return;
+  try {
+    const data = await api('delete_expired_keys', {});
+    toast(data.success ? `${data.deleted} expired key(s) deleted` : data.message);
     if (data.success) { loadKeys(); loadDashboard(); }
   } catch (err) { toast(err.message); }
 }
