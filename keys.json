@@ -68,5 +68,19 @@
     ],
     "key_type": "mod_menu",
     "created_by": "admin"
+  },
+  "SPIDER-MM-A3TM6-7MFP5": {
+    "label": "Hiren_self_Test",
+    "created_at": "2026-11-08T10:33:20.365Z",
+    "expires_at": null,
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": null,
+    "max_devices": 1,
+    "connected_devices": [],
+    "key_type": "mod_menu",
+    "created_by": "admin"
   }
 }
