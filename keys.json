@@ -74,12 +74,14 @@
     "created_at": "2026-11-08T02:12:57.844Z",
     "expires_at": "2026-12-08T02:12:56.484Z",
     "duration": "",
-    "device_id": null,
-    "locked_at": null,
+    "device_id": "H4X-DF8B38C8DF20",
+    "locked_at": "2026-11-08T02:13:52.096Z",
     "active": true,
     "reseller": null,
     "max_devices": 100,
-    "connected_devices": [],
+    "connected_devices": [
+      "H4X-DF8B38C8DF20"
+    ],
     "key_type": "mod_menu",
     "created_by": "admin"
   }
