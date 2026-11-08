@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-08T10:19:55.427Z",
+      "actor": "admin",
+      "action": "key deleted",
+      "detail": "SPIDER-MM-8C3MB-PC8AP"
+    },
+    {
       "ts": "2026-11-08T10:19:37.360Z",
       "actor": "admin",
       "action": "login",
