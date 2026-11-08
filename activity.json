@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-08T10:32:59.856Z",
+      "actor": "admin",
+      "action": "login",
+      "detail": "42.105.174.48"
+    },
+    {
       "ts": "2026-11-08T10:20:12.591Z",
       "actor": "admin",
       "action": "key deleted",
