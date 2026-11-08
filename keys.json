@@ -90,8 +90,8 @@
     "created_at": "2026-11-08T11:20:56.592Z",
     "expires_at": "2026-11-08T23:20:56.681Z",
     "duration": "",
-    "device_id": "H4X-59565CF659FD",
-    "locked_at": "2026-11-08T12:52:47.719Z",
+    "device_id": "H4X-EE5CB876EEF7",
+    "locked_at": "2026-11-08T14:55:41.701Z",
     "active": true,
     "reseller": null,
     "max_devices": 30,
@@ -102,7 +102,8 @@
       "H4X-441733E544BC",
       "H4X-C0D8D222C073",
       "H4X-1DDC458E1D77",
-      "H4X-59565CF659FD"
+      "H4X-59565CF659FD",
+      "H4X-EE5CB876EEF7"
     ],
     "key_type": "mod_menu",
     "created_by": "admin"
