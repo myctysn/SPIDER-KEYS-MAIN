@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-08T10:20:12.591Z",
+      "actor": "admin",
+      "action": "key deleted",
+      "detail": "SPIDER-MM-FWFKC-4AXHM"
+    },
+    {
       "ts": "2026-11-08T10:20:10.872Z",
       "actor": "admin",
       "action": "device reset",
