@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-09T10:01:36.529Z",
+      "actor": "admin",
+      "action": "keys generated",
+      "detail": "1x normal No Label"
+    },
+    {
       "ts": "2026-11-09T10:00:59.172Z",
       "actor": "admin",
       "action": "login",
