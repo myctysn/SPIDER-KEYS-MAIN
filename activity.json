@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-09T15:31:01.198Z",
+      "actor": "admin",
+      "action": "device reset",
+      "detail": "SPIDER-N-94PP6-Q3TMF"
+    },
+    {
       "ts": "2026-11-09T15:30:45.911Z",
       "actor": "admin",
       "action": "features updated",
