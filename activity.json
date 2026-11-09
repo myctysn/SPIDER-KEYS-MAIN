@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-09T15:30:45.911Z",
+      "actor": "admin",
+      "action": "features updated",
+      "detail": ""
+    },
+    {
       "ts": "2026-11-09T15:29:48.947Z",
       "actor": "admin",
       "action": "login",
