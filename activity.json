@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-10T03:24:12.220Z",
+      "actor": "admin",
+      "action": "login",
+      "detail": "152.58.61.57"
+    },
+    {
       "ts": "2026-11-09T15:31:01.198Z",
       "actor": "admin",
       "action": "device reset",
