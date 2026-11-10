@@ -126,5 +126,19 @@
     "connected_devices": [],
     "key_type": "normal",
     "created_by": "admin"
+  },
+  "SPIDER-N-YEEM3-VVAZ3": {
+    "label": "No Label",
+    "created_at": "2026-11-10T03:24:25.606Z",
+    "expires_at": "2026-11-20T03:24:24.400Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": null,
+    "max_devices": 1,
+    "connected_devices": [],
+    "key_type": "normal",
+    "created_by": "admin"
   }
 }
