@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-13T12:03:59.790Z",
+      "actor": "admin",
+      "action": "keys generated",
+      "detail": "1x mod_menu TEST_MOD"
+    },
+    {
       "ts": "2026-11-13T12:03:46.467Z",
       "actor": "admin",
       "action": "login",
