@@ -30,5 +30,19 @@
     ],
     "key_type": "normal",
     "created_by": "admin"
+  },
+  "SPIDER-MM-2P4AZ-ZKYSK": {
+    "label": "TEST",
+    "created_at": "2026-11-13T13:20:33.945Z",
+    "expires_at": "2026-11-14T13:20:27.607Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": null,
+    "max_devices": 1,
+    "connected_devices": [],
+    "key_type": "mod_menu",
+    "created_by": "admin"
   }
 }
