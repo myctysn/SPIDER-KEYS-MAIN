@@ -142,5 +142,19 @@
     ],
     "key_type": "normal",
     "created_by": "admin"
+  },
+  "SPIDER-MM-V7AWY-XVVKK": {
+    "label": "TEST_MOD",
+    "created_at": "2026-11-13T12:03:58.606Z",
+    "expires_at": "2026-11-14T12:03:59.136Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": null,
+    "max_devices": 1,
+    "connected_devices": [],
+    "key_type": "mod_menu",
+    "created_by": "admin"
   }
 }
