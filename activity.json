@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-13T12:51:43.784Z",
+      "actor": "admin",
+      "action": "key deleted",
+      "detail": "SPIDER-MM-V7AWY-XVVKK"
+    },
+    {
       "ts": "2026-11-13T12:05:51.930Z",
       "actor": "admin",
       "action": "expired keys deleted",
