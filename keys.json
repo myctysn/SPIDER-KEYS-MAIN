@@ -50,8 +50,8 @@
     "created_at": "2026-11-14T12:54:20.953Z",
     "expires_at": "2026-11-15T12:54:19.818Z",
     "duration": "",
-    "device_id": "H4X-1DDC458E1D77",
-    "locked_at": "2026-11-14T16:24:18.249Z",
+    "device_id": "H4X-846D186484C6",
+    "locked_at": "2026-11-14T17:16:38.805Z",
     "active": true,
     "reseller": null,
     "max_devices": 30,
@@ -70,7 +70,8 @@
       "H4X-5513985255B8",
       "H4X-EB800285EB2B",
       "H4X-AC9920DBAC32",
-      "H4X-1DDC458E1D77"
+      "H4X-1DDC458E1D77",
+      "H4X-846D186484C6"
     ],
     "key_type": "mod_menu",
     "created_by": "admin"
