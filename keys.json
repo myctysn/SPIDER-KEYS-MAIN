@@ -50,12 +50,14 @@
     "created_at": "2026-11-14T12:54:20.953Z",
     "expires_at": "2026-11-15T12:54:19.818Z",
     "duration": "",
-    "device_id": null,
-    "locked_at": null,
+    "device_id": "H4X-A5AB2757A500",
+    "locked_at": "2026-11-14T12:59:30.965Z",
     "active": true,
     "reseller": null,
     "max_devices": 30,
-    "connected_devices": [],
+    "connected_devices": [
+      "H4X-A5AB2757A500"
+    ],
     "key_type": "mod_menu",
     "created_by": "admin"
   }
