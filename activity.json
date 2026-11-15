@@ -1,6 +1,12 @@
 {
   "entries": [
     {
+      "ts": "2026-11-15T03:45:21.176Z",
+      "actor": "admin",
+      "action": "login",
+      "detail": "152.59.33.1"
+    },
+    {
       "ts": "2026-11-14T12:54:22.076Z",
       "actor": "admin",
       "action": "keys generated",
